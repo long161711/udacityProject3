@@ -577,5 +577,7 @@ workflows:
           requires: [smoke-test]
       - add-prometheus-node-exporter:
           requires: [smoke-test]
+      # I commented out the cleanup job because it will delete the infrastructure when I run the workflow and Reviewer cant review my work (website)
+      # But If I uncomment it, it will delete the infrastructure after the workflow is done.It runs normally.
       - cleanup:
           requires: [cloudfront-update, add-prometheus-node-exporter]
