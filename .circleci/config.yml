@@ -524,31 +524,6 @@ jobs:
                 echo '-------------------CANNOT CLEAN UP --------------------------'
               fi
 
-  add-prometheus-node-exporter:
-    docker:
-      - image: python:3.7-alpine:3.16
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - '39:6b:4a:6a:44:95:78:ad:53:e4:9b:65:f5:d9:85:9d'
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update aws-cli tar gzip ansible nodejs npm
-      - attach_Workspace:
-          at: ~/
-      - run:
-          name: Setup Prometheus Node Exporter
-          command: |
-            cd .circleci/ansible
-            cat inventory.txt
-            ansible-playbook -i inventory.txt node-exporter.yml
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-
 workflows:
   default:
     jobs:
@@ -576,9 +551,7 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      - add-prometheus-node-exporter:
-          requires: [smoke-test]
       # I commented out the cleanup job because it will delete the infrastructure when I run the workflow and Reviewer cant review my work (website)
-      # But If I uncomment it, it will delete the infrastructure after the workflow is done.It runs normally.
-      - cleanup:
-          requires: [cloudfront-update, add-prometheus-node-exporter]
+      # But If I uncomment it, it will delete the infrastructure after the workflow is done.It runs normally.        
+      # - cleanup:
+      #     requires: [cloudfront-update]
