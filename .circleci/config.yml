@@ -532,12 +532,12 @@ jobs:
         - add_ssh_keys:
             fingerprints:
               - '39:6b:4a:6a:44:95:78:ad:53:e4:9b:65:f5:d9:85:9d'
+        - attach_Workspace:
+            at: ~/
         - run:
             name: Install dependencies
             command: |
               apk add --update aws-cli tar gzip ansible nodejs npm
-        - attach_Workspace:
-            at: ~/
         - run:
             name: Setup Prometheus Node Exporter
             command: |
@@ -581,4 +581,4 @@ workflows:
       # I commented out the cleanup job because it will delete the infrastructure when I run the workflow and Reviewer cant review my work (website)
       # But If I uncomment it, it will delete the infrastructure after the workflow is done.It runs normally.
       - cleanup:
-          requires: [cloudfront-update]
+          requires: [cloudfront-update, add-prometheus-node-exporter]
