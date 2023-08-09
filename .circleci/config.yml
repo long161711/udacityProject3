@@ -536,7 +536,7 @@ jobs:
             name: Install dependencies
             command: |
               # install dependencies by using apk package manager to install aws-cli tar gzip ansible nodejs npm
-              apk add --update aws-cli tar gzip ansible nodejs npm
+              apk add --update --no-cache aws-cli tar gzip ansible nodejs npm
         - attach_Workspace:
             at: ~/
         - run:
